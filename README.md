@@ -1,20 +1,21 @@
 <h1 align="center">🎯 MCP Server Hub</h1>
 <p align="center">
   <b>开箱即用的 MCP 服务器全家桶</b><br>
-  一键安装 · 零配置 · 覆盖 8+ 场景
+  一键安装 · 零配置 · 覆盖 10+ 场景
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/npm/v/mcp-server-hub?color=blue" alt="npm">
-  <img src="https://img.shields.io/github/license/cosmicdk/mcp-server-hub?color=green" alt="license">
-  <img src="https://img.shields.io/github/stars/cosmicdk/mcp-server-hub?style=social" alt="stars">
+  <img src="https://img.shields.io/badge/version-2.0-blue" alt="version">
+  <img src="https://img.shields.io/badge/license-MIT-green" alt="license">
+  <img src="https://img.shields.io/badge/servers-10-orange" alt="servers">
+  <img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen" alt="node">
 </p>
 
 ---
 
 ## 🤔 这是什么？
 
-**MCP Server Hub** 是一个 Monorepo，包含 **8+ 个即用型 MCP 服务器**，让 AI 助手（Claude Desktop、Continue、Cline 等）立刻获得：
+**MCP Server Hub** 让 AI 助手（Claude Desktop、Cursor、Cline 等）立刻获得超能力：
 
 | 服务器 | 功能 | 一句话 |
 |--------|------|--------|
@@ -26,15 +27,19 @@
 | 📅 **DateTime** | 时间日期 | "下周五是几号？" |
 | 🔢 **Calculator** | 科学计算 | "计算这个积分..." |
 | 📱 **QR Code** | 二维码 | "生成这个链接的二维码" |
+| 📡 **RSS** | 阅读器 | "今天 Hacker News 有什么热门？" |
 
-## ⚡ 10 秒安装
+## ⚡ 5 秒上手
 
 ```bash
-# 一键安装所有服务器
-npx mcp-server-hub install
+# 查看所有服务器
+npx mcp-server-hub list
 
-# 或单独安装某个
-npx @mcp-hub/server-weather
+# 一键生成 Claude Desktop 配置
+npx mcp-server-hub config
+
+# 查看服务器详情
+npx mcp-server-hub info weather
 ```
 
 ## 🎮 Claude Desktop 配置
@@ -46,9 +51,13 @@ npx @mcp-hub/server-weather
       "command": "npx",
       "args": ["-y", "@mcp-hub/server-weather"]
     },
-    "translator": {
+    "web-search": {
       "command": "npx",
-      "args": ["-y", "@mcp-hub/server-translator"]
+      "args": ["-y", "@mcp-hub/server-web-search"]
+    },
+    "datetime": {
+      "command": "npx",
+      "args": ["-y", "@mcp-hub/server-datetime"]
     }
   }
 }
@@ -59,15 +68,18 @@ npx @mcp-hub/server-weather
 ```
 mcp-server-hub/
 ├── packages/
+│ ├── cli/ # 🎯 一键管理 CLI
 │ ├── shared/ # 共享工具库
-│ ├── server-weather/ # 天气查询
-│ ├── server-translator/ # 翻译服务
-│ ├── server-filesystem/ # 文件管理
-│ ├── server-database/ # 数据库查询
-│ ├── server-web-search/ # 网页搜索
-│ ├── server-datetime/ # 时间日期
-│ ├── server-calculator/ # 科学计算
-│ └── server-qrcode/ # 二维码
+│ ├── server-template/ # 🏷️ 新服务器模板
+│ ├── server-weather/ # 🌤️ 天气
+│ ├── server-translator/ # 🌍 翻译
+│ ├── server-filesystem/ # 📁 文件
+│ ├── server-database/ # 🗄️ 数据库
+│ ├── server-web-search/ # 🔍 搜索
+│ ├── server-datetime/ # 📅 日期
+│ ├── server-calculator/ # 🔢 计算
+│ ├── server-qrcode/ # 📱 二维码
+│ └── server-rss/ # 📡 RSS
 ├── docs/ # 文档
 ├── scripts/ # 脚本
 └── docker-compose.yml # Docker 部署
@@ -83,19 +95,21 @@ mcp-server-hub/
 ### 安装与开发
 
 ```bash
-# 克隆
 git clone https://github.com/cosmicdk/mcp-server-hub.git
 cd mcp-server-hub
-
-# 安装依赖
 pnpm install
-
-# 构建所有包
 pnpm build
 
-# 启动某个服务器
-cd packages/server-weather
-pnpm dev
+# 运行 CLI
+node packages/cli/dist/index.js list
+```
+
+### 创建新服务器
+
+```bash
+cp -r packages/server-template packages/server-YOURNAME
+# 编辑 package.json + src/index.ts
+pnpm install && pnpm build
 ```
 
 ### Docker 部署
@@ -104,23 +118,9 @@ pnpm dev
 docker-compose up -d
 ```
 
-## 📦 包列表
-
-| 包名 | npm | 说明 |
-|------|-----|------|
-| `@mcp-hub/shared` | - | 共享工具和类型 |
-| `@mcp-hub/server-weather` | - | Open-Meteo API 封装 |
-| `@mcp-hub/server-translator` | - | 多引擎翻译 |
-| `@mcp-hub/server-filesystem` | - | 安全文件操作 |
-| `@mcp-hub/server-database` | - | SQLite/MySQL/PostgreSQL |
-| `@mcp-hub/server-web-search` | - | 多搜索引擎 |
-| `@mcp-hub/server-datetime` | - | 时区/日历/倒计时 |
-| `@mcp-hub/server-calculator` | - | 数学表达式求值 |
-| `@mcp-hub/server-qrcode` | - | QR 码生成与解析 |
-
 ## 🤝 贡献
 
-欢迎贡献！请查看 [CONTRIBUTING.md](./CONTRIBUTING.md)
+欢迎贡献新服务器！详见 [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## 📄 许可
 
